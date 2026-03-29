@@ -200,3 +200,200 @@ function onPlaceChanged() {
 //     });
 
 // }
+
+$(document).ready(function(){
+    //ADD TO CART
+    $('.add_to_cart').on('click', function(e){
+        e.preventDefault();
+
+        food_id = $(this).attr('data-id');
+        url = $(this).attr('data-url');
+
+        // data = {
+        //     food_id: food_id,
+        // }
+        $.ajax({
+            type: 'GET',
+            url: url,
+            // data: data, as url will contain bydefault foof_id
+            success: function(response){
+                console.log(response)
+                if(response.status == 'login_required'){
+                    Swal.fire({title: response.message, text: "Only Login User", icon: "success"}).then(function(){
+                        window.location = '/login';
+                    })
+                }else if(response.status == 'Success'){
+                    // Update UI only if successful
+                    console.log(response.cart_counter['cart_count'])
+                    $('#cart-count').html(response.cart_counter['cart_count'])
+                    $('#qty-'+food_id).html(response.qty)
+
+                    // subtotal, tax and grand_total by calling the fun
+                    applyCartAmounts(
+                        response.cart_amount['subtotal'],
+                        response.cart_amount['tax'],
+                        response.cart_amount['grand_total'],
+                    )
+                }else{
+                    // Handle the failure message
+                    Swal.fire({title: response.message, text: " ", icon: "error"})
+                }
+
+                
+            }
+        })
+    })
+
+    //place the cart item quantity on load
+    $('.item_qty').each(function(){
+        var the_id = $(this).attr('id');
+        var qty = $(this).attr('data-qty');
+        // console.log(qty)
+        $('#'+the_id).html(qty)
+
+    })
+    
+
+    //DECREASE CART
+    $('.decrease_cart').on('click', function(e){
+        e.preventDefault();
+
+        food_id = $(this).attr('data-id');
+        cart_id = $(this).attr('data-cartid');
+        url = $(this).attr('data-url');
+
+        // data = {
+        //     food_id: food_id,
+        // }
+        $.ajax({
+            type: 'GET',
+            url: url,
+            // data: data,
+            success: function(response){
+                console.log(response)
+                if(response.status == 'login_required'){
+                    Swal.fire({title: response.message, text: "Only Login User", icon: "success"}).then(function(){
+                        window.location = '/login';
+                    })
+                }else if(response.status == 'Success'){
+                    // Update UI only if successful
+                    console.log(response.cart_counter['cart_count'])
+                    // Update cart count
+                    $('#cart-count').html(response.cart_counter['cart_count'])
+                    // Update quantity
+                    $('#qty-'+food_id).html(response.qty)
+
+                    // subtotal, tax and grand_total by calling the fun
+                    applyCartAmounts(
+                        response.cart_amount['subtotal'],
+                        response.cart_amount['tax'],
+                        response.cart_amount['grand_total'],
+                    )
+                    
+                    if(window.location.pathname == '/cart/'){
+                        //calling the fun to remove cart and message if cart is empty
+                        removeCartItem(response.qty, cart_id)
+                        checkEmptyCart()
+                    }
+
+                }else{
+                    // Handle the failure message
+                    Swal.fire({title: response.message, text: " ", icon: "error"})
+                }
+                               
+            }
+        })
+    })
+
+    //DELETE CART ITEM
+    $('.delete_cart').on('click', function(e){
+        e.preventDefault();
+
+        cart_id = $(this).attr('data-id');
+        url = $(this).attr('data-url');
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            // data: data,
+            success: function(response){
+                console.log(response)
+                //As we have used @login_required in Cart view no need for login condtion
+                if(response.status == 'Success'){
+                    // Update UI only if successful
+                    console.log(response.cart_counter['cart_count'])
+                    // Update cart count
+                    $('#cart-count').html(response.cart_counter['cart_count'])
+                    // Update quantity
+                    // $('#qty-'+food_id).html(response.qty)
+                    Swal.fire({title: response.message, text: " ", icon: "success"})
+
+                    // subtotal, tax and grand_total by calling the fun
+                    applyCartAmounts(
+                        response.cart_amount['subtotal'],
+                        response.cart_amount['tax'],
+                        response.cart_amount['grand_total'],
+                    )
+
+                    //calling the function to remove or delete cart element after success
+                    removeCartItem(0, cart_id)
+                    //calling the function if cart count is 0
+                    checkEmptyCart()
+
+                }else{
+                    // Handle the failure message
+                    Swal.fire({title: response.message, text: " ", icon: "error"})
+                }
+                               
+            }
+        })
+    })
+
+    //Delete the cart item if the qty is 0
+    function removeCartItem(cartItemQty, cart_id){
+        if(cartItemQty<=0){
+            //remove cart item element.
+            // document.getElementById("cart-item-"+cart_id).remove()
+            var el = document.getElementById("cart-item-"+cart_id)
+            if(el){
+                el.remove()
+            }
+        }
+    }
+
+
+    //check if the cart is empty show the message(i.e check if the count on cart icon on navbar is 0, read the value by id 'cart_count)
+    // function checkEmptyCart(){
+    //     var cart_counter = document.getElementById('cart-count').innerHTML
+    //     if(cart_counter == 0){
+    //         document.getElementById('empty-cart').style.display = "block";
+    //     }
+    // }
+
+    function checkEmptyCart(){
+        var cartElement = document.getElementById('cart-count')
+
+        if(cartElement){
+            var cart_counter = cartElement.innerHTML
+
+            if(cart_counter == 0){
+                var emptyCart = document.getElementById('empty-cart')
+                if(emptyCart){
+                    emptyCart.style.display = "block"
+                }
+            }
+        }
+    }
+
+    //apply cart amounts
+    function applyCartAmounts(subtotal, tax, grand_total){
+        if(window.location.pathname == '/cart/'){
+            $('#subtotal').html(subtotal)
+            $('#tax').html(tax)
+            $('#total').html(grand_total)
+        }
+        
+    }
+
+
+})
