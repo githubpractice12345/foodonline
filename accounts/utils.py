@@ -61,10 +61,29 @@ def send_verification_email(request, user, mail_subject, email_template):
 #     mail.send()
 
 
+# def send_notification(mail_subject, mail_template, context):
+#     from_email = settings.DEFAULT_FROM_EMAIL
+#     message = render_to_string(mail_template, context)
+#     # to_email = context['user'].email
+#     to_email = context['to_email']
+#     mail = EmailMessage(mail_subject, message, from_email, to=[to_email])
+#     mail.send()
+
+
 def send_notification(mail_subject, mail_template, context):
     from_email = settings.DEFAULT_FROM_EMAIL
     message = render_to_string(mail_template, context)
-    to_email = context['user'].email
-    mail = EmailMessage(mail_subject, message, from_email, to=[to_email])
+
+    to_email = context.get('to_email') or context.get('to_emails')
+
+    # Normalize to list
+    if isinstance(to_email, str):
+        to_emails = [to_email]
+    elif isinstance(to_email, list):
+        to_emails = to_email
+    else:
+        raise ValueError("Invalid type for to_email")
+
+    mail = EmailMessage(mail_subject, message, from_email, to=to_emails)
     mail.send()
-    return
+    
