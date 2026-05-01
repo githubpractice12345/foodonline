@@ -4,13 +4,13 @@
 {% include 'includes/alerts.html' %}
 <!-- Main Section Start -->
 		<div class="main-section">
-			{% include 'customers/cover.html' %}
+			{% include 'includes/cover.html' %}
 			<div class="page-section account-header buyer-logged-in">
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 							<!--load the sidebar here-->
-							{% include 'includes/c_sidebar.html' %}
+							{% include 'includes/v_sidebar.html' %}
 						</div>
 						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 							<div class="user-dashboard loader-holder">
@@ -95,8 +95,8 @@
                                                                     Total
                                                                     <span class="price float-right">
                                                                         <span class="currency">$</span>
-                                                                        <span id="total">{{ order.total }}</span>
-                                                                        
+                                                                        <!-- <span id="total">{{ order.total }}</span> -->
+                                                                        <span id="total">{{ grand_total }}</span>
                                                                     </span>
                                                                 </li>
                                                                                             
