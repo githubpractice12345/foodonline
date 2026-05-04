@@ -1,4 +1,4 @@
-{% autoescape off %}
+<!-- {% autoescape off %}
 
 Hi {{user.first_name}},
 
@@ -8,4 +8,99 @@ Congratulations! Your restaurant has been approved by our admin team. --foodOnli
 We're sorry! You are not eligible for publishing your food menu on our market place.For more details contact support@foodonline.com. --foodOnline.
 {% endif %}
 
-{% endautoescape %}
+{% endautoescape %} -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vendor Approval</title>
+
+    <style>
+
+        body{
+            background:#F5F8FA;
+            font-family:Arial,sans-serif;
+        }
+
+        #email{
+            width:600px;
+            margin:auto;
+            background:white;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="email">
+
+    <table width="100%">
+        <tr>
+            <td align="center">
+                <img src="https://rathank.appzoneit.com/foodonline/logo/logo.png"
+                     width="300">
+            </td>
+        </tr>
+    </table>
+
+    <table width="100%"
+           bgcolor="#EAF0F6"
+           style="padding:40px;">
+
+        <tr>
+            <td>
+
+                <h2 align="center">
+                    Vendor Approval Status
+                </h2>
+
+                <p>
+                    Hi {{ user.first_name }},
+                </p>
+
+                {% if is_approved %}
+
+                <p>
+                    Congratulations!
+                    Your restaurant has been approved by our admin team.
+                </p>
+
+                {% else %}
+
+                <p>
+                    We're sorry.
+                    Your restaurant is currently not eligible for publishing food items.
+                </p>
+
+                {% endif %}
+
+            </td>
+        </tr>
+
+    </table>
+
+    <table width="100%"
+           bgcolor="#C33332">
+
+        <tr>
+            <td align="center"
+                style="padding:20px;color:white;">
+
+                © 2026 FoodOnline Marketplace
+
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
+</html>
+
