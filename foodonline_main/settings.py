@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 # DEBUG = True
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['172.232.96.133', '127.0.0.1', 'localhost', 'djangofoodonline.duckdns.org', 'www.djangofoodonline.duckdns.org']
 
 
 # Application definition

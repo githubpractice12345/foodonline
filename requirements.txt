@@ -1,0 +1,17 @@
+asgiref==3.9.1
+backports.zoneinfo==0.2.1;python_version<"3.9"
+certifi==2026.4.22
+charset-normalizer==3.4.7
+Django==5.2.4
+idna==3.13
+pillow==11.3.0
+psycopg2-binary
+python-decouple==3.8
+razorpay==2.0.1
+requests==2.33.1
+simplejson==4.0.1
+sqlparse==0.5.3
+typing_extensions==4.14.1
+tzdata==2025.2
+urllib3==2.6.3
+gunicorn
